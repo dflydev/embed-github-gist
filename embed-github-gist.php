@@ -110,7 +110,14 @@ function handle_embed_github_gist_shortcode($atts, $content = null) {
         'ttl' => null,
         'bump' => null,
     ), $atts));
-    return embed_github_gist($id, $ttl, $bump, $file);
+    if ( ! $id ) {
+        if ( $content ) {
+            if ( preg_match('/\s*http.+\/(\d+)/', $content, $matches) ) {
+                $id = $matches[1];
+            }
+        }
+    }
+    return $id ? embed_github_gist($id, $ttl, $bump, $file) : $content;
 }
 
 /**

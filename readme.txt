@@ -1,23 +1,27 @@
 === Embed GitHub Gist ===
 Contributors: dflydev
-Donate link: http://dflydev.com/
-Tags: github, gist, source, syntax, highlight, highlighter
-Requires at least: 2.0
+Donate link: http://dflydev.com/d2code/wordpress/embed-github-gist-plugin/
+Tags: github, gist, source, syntax, highlight, highlighter, embed
+Requires at least: 2.8.6
 Tested up to: 3.0.1
-Stable tag: 0.1
+Stable tag: 0.2
 
 Embed GitHub Gists into WordPress.
 
 == Description ==
+
+Follow here: [Embed GitHub Gist](http://dflydev.com/d2code/wordpress/embed-github-gist-plugin/)
 
 Embed [GitHub](http://github.com/) [Gists](http://gist.github.com) into
 WordPress. Provides a shortcode for posts and pages but also has the ability
 to embed by hand in the event that a Gist needs to be embedded somewhere in
 the page that does not pass through the shortcode filters.
 
-Example:
+Examples:
 
 `[gist id=546764]`
+`[gist]http://gist.github.com/546764[/gist]`
+
 
 Cache is implemented with the Transients API to minimize delay on loading
 content. Default TTL (time to live) is 86400 seconds or one day.
@@ -92,10 +96,16 @@ No screenshots now!
 
 == Changelog ==
 
+= 0.2 =
+ * Added to support passing a Gist URL as the content of the [gist] shortcode.
+
 = 0.1 =
 * First release.
 
 == Upgrade Notice ==
+
+= 0.2 =
+Should have no negative impact.
 
 = 0.1 =
 First release.
