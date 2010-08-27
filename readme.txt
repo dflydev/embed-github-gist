@@ -43,7 +43,7 @@ section wrapped as follows:
 `</noscript>`
 
 
-Upcoming features:
+= Upcoming features: =
 
 * Option for setting default TTL
 * Option to bypass cache entirely
