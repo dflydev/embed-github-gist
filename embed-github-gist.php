@@ -30,20 +30,6 @@ $embed_github_gist_loaded_count = 0;
 $embed_github_gist_default_ttl = 86400; // 60*60*24 (1 day)
 
 /**
- * Get content from a URL
- * @param string $url
- */
-function embed_github_gist_curl($url) {
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,1);
-    $content = curl_exec($ch);
-    curl_close($ch);
-    return $content;
-}
-
-/**
  * Build a cache key
  * @param int $id GitHub Gist ID
  * @param string $bump Bump value to force cache expirey.
@@ -76,18 +62,29 @@ function embed_github_gist_prefer_inline_html() {
  * @param string $file Name of file
  */
 function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
+		if ( !class_exists('WP_Http') ) {
+			require_once ABSPATH.WPINC.'/class-http.php';
+		}
+	
     $key = embed_github_gist_build_cache_key($id, $bump);
     if ( embed_github_gist_bypass_cache() or false === ( $gist = get_transient($key) ) ) {
+    		$http = new WP_Http;
+    	
         if ( embed_github_gist_prefer_inline_html() and function_exists('json_decode') ) {
-            $json = json_decode(embed_github_gist_curl('https://gist.github.com/' . $id . '.json'));
+        		$result = $http->request('https://gist.github.com/' . $id . '.json');
+            $json = json_decode($result['body']);
             $gist = $json->div;
         } else {
             if ( ! $file ) $file = 'file';
+            $result = $http->request('https://gist.github.com/raw/' . $id . '/' . $file);
             $gist = '<script src="https://gist.github.com/' . $id . '.js?file=' . $file . '%5B345%5D"></script>';
             $gist .= '<noscript><div class="embed-github-gist-source"><code><pre>';
-            $gist .= htmlentities(embed_github_gist_curl('https://gist.github.com/raw/' . $id . '/' . $file));
+            $gist .= htmlentities($result['body']);
             $gist .= '</pre></code></div></noscript>';
         }
+        
+        unset($result, $http);
+        
         if ( ! embed_github_gist_bypass_cache() ) {
             if ( ! $ttl ) $ttl = $embed_github_gist_default_ttl;
             set_transient($key, $gist, $ttl);
