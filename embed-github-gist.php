@@ -79,13 +79,13 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
     $key = embed_github_gist_build_cache_key($id, $bump);
     if ( embed_github_gist_bypass_cache() or false === ( $gist = get_transient($key) ) ) {
         if ( embed_github_gist_prefer_inline_html() and function_exists('json_decode') ) {
-            $json = json_decode(embed_github_gist_curl('http://gist.github.com/' . $id . '.json'));
+            $json = json_decode(embed_github_gist_curl('https://gist.github.com/' . $id . '.json'));
             $gist = $json->div;
         } else {
             if ( ! $file ) $file = 'file';
-            $gist = '<script src="http://gist.github.com/' . $id . '.js?file=' . $file . '%5B345%5D"></script>';
+            $gist = '<script src="https://gist.github.com/' . $id . '.js?file=' . $file . '%5B345%5D"></script>';
             $gist .= '<noscript><div class="embed-github-gist-source"><code><pre>';
-            $gist .= htmlentities(embed_github_gist_curl('http://gist.github.com/raw/' . $id . '/' . $file));
+            $gist .= htmlentities(embed_github_gist_curl('https://gist.github.com/raw/' . $id . '/' . $file));
             $gist .= '</pre></code></div></noscript>';
         }
         if ( ! embed_github_gist_bypass_cache() ) {
@@ -124,7 +124,7 @@ function handle_embed_github_gist_shortcode($atts, $content = null) {
  * Styles.
  */
 function embed_github_gist_styles() {
-    wp_enqueue_style('embed_github_gist_from_gist', 'http://gist.github.com/stylesheets/gist/embed.css');
+    wp_enqueue_style('embed_github_gist_from_gist', 'https://gist.github.com/stylesheets/gist/embed.css');
 }
 
 /**
