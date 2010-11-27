@@ -28,7 +28,7 @@ if ( !defined('EMBED_GISTHUB_INLINE_HTML') ) {
 }
 
 if ( !defined('EMBED_GISTHUB_BYPASS_CACHE') ) {
-	define('EMBED_GISTHUB_BYPASS_CACHE', true);
+	define('EMBED_GISTHUB_BYPASS_CACHE', false);
 }
 
 /**
@@ -58,6 +58,7 @@ function embed_github_gist_prefer_inline_html() {
 
 /**
  * Gets content from GitHub Gist
+ * 
  * @param int $id GitHub Gist ID
  * @param int $ttl How long to cache (in seconds)
  * @param string $bump Bump value to force cache expirey.
