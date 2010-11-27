@@ -112,7 +112,7 @@ function handle_embed_github_gist_shortcode($atts, $content = null) {
     ), $atts));
     if ( ! $id ) {
         if ( $content ) {
-            if ( preg_match('/\s*http.+\/(\d+)/', $content, $matches) ) {
+            if ( preg_match('/\s*https?.+\/(\d+)/', $content, $matches) ) {
                 $id = $matches[1];
             }
         }
