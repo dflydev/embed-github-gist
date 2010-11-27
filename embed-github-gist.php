@@ -16,18 +16,20 @@ License: New BSD License - http://www.opensource.org/licenses/bsd-license.php
 // TODO Implement admin interface to control options
 
 /**
- * Track how many gists have been displayed
- * 
- * Used to determine whether or not to late-load the gist css.
- * @var int
- */
-$embed_github_gist_loaded_count = 0;
-
-/**
  * Default ttl for cache.
  * @var int
  */
-$embed_github_gist_default_ttl = 86400; // 60*60*24 (1 day)
+if ( !defined('EMBED_GISTHUB_DEFAULT_TTL') ) {
+	define('EMBED_GISTHUB_DEFAULT_TTL', 86400);	// 60*60*24 (1 day)
+}
+
+if ( !defined('EMBED_GISTHUB_INLINE_HTML') ) {
+	define('EMBED_GISTHUB_INLINE_HTML', true);
+}
+
+if ( !defined('EMBED_GISTHUB_BYPASS_CACHE') ) {
+	define('EMBED_GISTHUB_BYPASS_CACHE', true);
+}
 
 /**
  * Build a cache key
@@ -44,14 +46,14 @@ function embed_github_gist_build_cache_key($id, $bump = null) {
  * Bypass cache?
  */
 function embed_github_gist_bypass_cache() {
-    return true;
+    return EMBED_GISTHUB_BYPASS_CACHE;
 }
 
 /**
  * Prefer inline HTML over JS?
  */
 function embed_github_gist_prefer_inline_html() {
-    return false;
+    return EMBED_GISTHUB_INLINE_HTML;
 }
 
 /**
@@ -86,12 +88,11 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
         unset($result, $http);
         
         if ( ! embed_github_gist_bypass_cache() ) {
-            if ( ! $ttl ) $ttl = $embed_github_gist_default_ttl;
+            if ( ! $ttl ) $ttl = EMBED_GISTHUB_DEFAULT_TTL;
             set_transient($key, $gist, $ttl);
         }
     }
-    global $embed_github_gist_loaded_count;
-    if ( $gist ) $embed_github_gist_loaded_count++;
+
     return $gist;
 }
 
@@ -107,6 +108,7 @@ function handle_embed_github_gist_shortcode($atts, $content = null) {
         'ttl' => null,
         'bump' => null,
     ), $atts));
+
     if ( ! $id ) {
         if ( $content ) {
             if ( preg_match('/\s*https?.+\/(\d+)/', $content, $matches) ) {
@@ -125,34 +127,34 @@ function embed_github_gist_styles() {
 }
 
 /**
- * Handle styles early. (HEAD)
- */
-function handle_embed_github_gist_styles_early() {
-    embed_github_gist_styles();
-}
-
-/**
- * Handle styles late. (footer, only if one gist has been show)
- */
-function handle_embed_github_gist_styles_late() {
-    global $embed_github_gist_loaded_count;
-    if ( $embed_github_gist_loaded_count > 0 ) {
-        // Not entirely clear how safe this is?
-        embed_github_gist_styles();
-        wp_print_styles();
-    }
-}
-
-/**
  * Init the plugin.
  */
 function handle_embed_github_gist_init() {
     add_shortcode('gist', 'handle_embed_github_gist_shortcode');
-    if ( true ) {
-        add_action('wp_print_styles', 'handle_embed_github_gist_styles_early');
-    } else {
-        add_action('wp_print_footer_scripts', 'handle_embed_github_gist_styles_late');
-    }
+}
+
+/**
+ * Detects if available posts contains a gist shortcode inside
+ * 
+ * @author oncletom
+ */
+function embed_github_gist_post_candidate()
+{
+	global $posts;
+	
+	foreach ($posts as $p) {
+		if (preg_match('/\[gist[^\]]*\]/siU', $p->post_content)) {
+			embed_github_gist_styles();
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 add_action('init', 'handle_embed_github_gist_init');
+
+if ( !is_admin()) {
+	add_action('wp', 'embed_github_gist_post_candidate');
+}
