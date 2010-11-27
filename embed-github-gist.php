@@ -64,16 +64,18 @@ function embed_github_gist_prefer_inline_html() {
  * @param string $file Name of file
  */
 function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
-		if ( !class_exists('WP_Http') ) {
-			require_once ABSPATH.WPINC.'/class-http.php';
-		}
-	
+	$gist = '';
+
+	if ( !class_exists('WP_Http') ) {
+		require_once ABSPATH.WPINC.'/class-http.php';
+	}
+
     $key = embed_github_gist_build_cache_key($id, $bump);
     if ( embed_github_gist_bypass_cache() or false === ( $gist = get_transient($key) ) ) {
-    		$http = new WP_Http;
-    	
+    	$http = new WP_Http;
+    
         if ( embed_github_gist_prefer_inline_html() and function_exists('json_decode') ) {
-        		$result = $http->request('https://gist.github.com/' . $id . '.json');
+        	$result = $http->request('https://gist.github.com/' . $id . '.json');
             $json = json_decode($result['body']);
             $gist = $json->div;
         } else {
