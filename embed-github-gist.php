@@ -76,7 +76,8 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
     	$http = new WP_Http;
     
         if ( embed_github_gist_prefer_inline_html() and function_exists('json_decode') ) {
-        	$result = $http->request('https://gist.github.com/' . $id . '.json');
+            if ($file) $file = "?file=$file";
+            $result = $http->request('https://gist.github.com/' . $id . '.json' . $file);
             $json = json_decode($result['body']);
             $gist = $json->div;
         } else {
