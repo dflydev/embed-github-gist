@@ -99,6 +99,9 @@ No screenshots now!
 = 0.6 =
  * Embed stylesheet is now cached locally by default
 
+= 0.5 =
+ * Bump release
+
 = 0.4 =
  * Bump release ("same as 0.2")
 
