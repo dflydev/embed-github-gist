@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/extend/plugins/embed-github-gist/
 Description: Embed GitHub Gists
 Author: Dragonfly Development
 Author URI: http://dflydev.com/
-Version: 0.5
+Version: 0.6-dev
 License: New BSD License - http://www.opensource.org/licenses/bsd-license.php
 */
 
