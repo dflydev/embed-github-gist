@@ -126,7 +126,7 @@ function handle_embed_github_gist_shortcode($atts, $content = null) {
  * Styles.
  */
 function embed_github_gist_styles() {
-    wp_enqueue_style('embed_github_gist_from_gist', plugins_url('github-embed.css', __FILE__));
+    wp_enqueue_style('embed_github_gist_from_gist', plugins_url('stylesheets/embed.css', __FILE__));
 }
 
 /**
