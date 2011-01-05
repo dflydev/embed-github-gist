@@ -98,6 +98,7 @@ No screenshots now!
 
 = 0.6 =
  * Embed stylesheet is now cached locally by default
+ * Fixed small file-bug when using json
 
 = 0.5 =
  * Bump release
