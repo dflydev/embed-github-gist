@@ -96,6 +96,9 @@ No screenshots now!
 
 == Changelog ==
 
+= 0.5 =
+ * Updates from oncletom (change default settings, works with new HTTPS URL from Gist)
+
 = 0.4 =
  * Bump release ("same as 0.2")
 
@@ -109,6 +112,9 @@ No screenshots now!
 * First release.
 
 == Upgrade Notice ==
+
+= 0.5 =
+Now defaults to using cache and embedding HTML directly.
 
 = 0.4 =
 No changes from previous release.
