@@ -20,6 +20,8 @@ the page that does not pass through the shortcode filters.
 Examples:
 
 `[gist id=546764]`
+`[gist id=546764 file=file.txt]`
+`[gist id=546764 file=file.txt bump=1]`
 `[gist]http://gist.github.com/546764[/gist]`
 
 
@@ -89,12 +91,20 @@ Yes.
 
 `<?php echo embed_github_gist(546764); ?>`
 
+= Can I display a specific file from my gist? =
+
+Ues. You can use the `file` parameter:
+
+`[gist id=546764 file=file.txt]`
+
 == Screenshots ==
 
 No screenshots now!
 
-
 == Changelog ==
+
+= 0.6 =
+ * Fixed small file-bug when using json
 
 = 0.5 =
  * Updates from oncletom (change default settings, works with new HTTPS URL from Gist)
