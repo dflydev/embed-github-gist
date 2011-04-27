@@ -36,9 +36,10 @@ if ( !defined('EMBED_GISTHUB_BYPASS_CACHE') ) {
  * @param int $id GitHub Gist ID
  * @param string $bump Bump value to force cache expirey.
  */
-function embed_github_gist_build_cache_key($id, $bump = null) {
+function embed_github_gist_build_cache_key($id, $bump = null, $file=null) {
     $key = 'embed_github_gist-' . $id;
     if ( $bump ) $key .= '-' . $bump;
+    if ( $file ) $key .= '-' . $file;
     return $key;
 }
 
@@ -71,7 +72,7 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
 		require_once ABSPATH.WPINC.'/class-http.php';
 	}
 
-    $key = embed_github_gist_build_cache_key($id, $bump);
+    $key = embed_github_gist_build_cache_key($id, $bump, $file);
     if ( embed_github_gist_bypass_cache() or false === ( $gist = get_transient($key) ) ) {
     	$http = new WP_Http;
     
