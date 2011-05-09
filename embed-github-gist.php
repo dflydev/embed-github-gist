@@ -78,7 +78,10 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
     
         if ( embed_github_gist_prefer_inline_html() and function_exists('json_decode') ) {
             if ($file) $file = "?file=$file";
-            $result = $http->request('https://gist.github.com/' . $id . '.json' . $file);
+            $args = array('sslverify' => false);
+            $result = $http->request('https://gist.github.com/' . $id . '.json' . $file, $args);
+            if ( is_wp_error($result) )
+                echo $result->get_error_message();
             $json = json_decode($result['body']);
             $gist = $json->div;
         } else {
