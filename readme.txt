@@ -1,10 +1,9 @@
 === Embed GitHub Gist ===
 Contributors: dflydev
-Donate link: http://dflydev.com/d2code/wordpress/embed-github-gist-plugin/
 Tags: github, gist, source, syntax, highlight, highlighter, embed
 Requires at least: 2.8.6
 Tested up to: 3.1
-Stable tag: 0.8
+Stable tag: 0.9
 
 Embed GitHub Gists into WordPress.
 
@@ -102,6 +101,9 @@ Ues. You can use the `file` parameter:
 No screenshots now!
 
 == Changelog ==
+
+= 0.9 =
+ * Fix js link bug. Thanks to wrightlabs.
 
 = 0.8 =
  * Better handle SSL errors. Thanks to gabesumner and CaioProiete.
