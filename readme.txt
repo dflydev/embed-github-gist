@@ -9,8 +9,6 @@ Embed GitHub Gists into WordPress.
 
 == Description ==
 
-Follow here: [Embed GitHub Gist](http://dflydev.com/d2code/wordpress/embed-github-gist-plugin/)
-
 Embed [GitHub](http://github.com/) [Gists](http://gist.github.com) into
 WordPress. Provides a shortcode for posts and pages but also has the ability
 to embed by hand in the event that a Gist needs to be embedded somewhere in
