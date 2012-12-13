@@ -5,8 +5,8 @@ Plugin URI: http://wordpress.org/extend/plugins/embed-github-gist/
 Description: Embed GitHub Gists
 Author: Dragonfly Development
 Author URI: http://dflydev.com/
-Version: 0.10
-License: New BSD License - http://www.opensource.org/licenses/bsd-license.php
+Version: 0.11
+License: MIT - http://opensource.org/licenses/mit
 */
 
 // TODO Option for default ttl
@@ -24,7 +24,7 @@ if ( !defined('EMBED_GISTHUB_DEFAULT_TTL') ) {
 }
 
 if ( !defined('EMBED_GISTHUB_INLINE_HTML') ) {
-	define('EMBED_GISTHUB_INLINE_HTML', true);
+	define('EMBED_GISTHUB_INLINE_HTML', false);
 }
 
 if ( !defined('EMBED_GISTHUB_BYPASS_CACHE') ) {
@@ -73,25 +73,49 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
 	}
 
     $key = embed_github_gist_build_cache_key($id, $bump, $file);
-    if ( embed_github_gist_bypass_cache() or false === ( $gist = get_transient($key) ) ) {
+    if ( embed_github_gist_bypass_cache() || false === ( $gist = get_transient($key) ) ) {
     	$http = new WP_Http;
-    
-        if ( embed_github_gist_prefer_inline_html() and function_exists('json_decode') ) {
-            if ($file) $file = "?file=$file";
-            $args = array('sslverify' => false);
-            $result = $http->request('https://gist.github.com/' . $id . '.json' . $file, $args);
-            if ( is_wp_error($result) ) {
-                echo $result->get_error_message();
+        $args = array('sslverify' => false);
+        $result = $http->request('https://api.github.com/gists/' . $id, $args);
+        if ( is_wp_error($result) ) {
+            echo $result->get_error_message();
+        }
+        $json = json_decode($result['body'], true);
+
+        $files = array();
+        foreach ($json['files'] as $name => $fileInfo) {
+            if ($file === null) {
+                $files[$name] = $fileInfo;
+            } else {
+                if ($file == $name) {
+                    $files[$name] = $fileInfo;
+                    break;
+                }
             }
-            $json = json_decode($result['body']);
-            $gist = $json->div;
-        } else {
-            if ( ! $file ) $file = 'file';
-            $result = $http->request('https://gist.github.com/raw/' . $id . '/' . $file);
-            $gist = '<script src="https://gist.github.com/' . $id . '.js?file=' . $file . '" type="text/javascript"></script>';
-            $gist .= '<noscript><div class="embed-github-gist-source"><code><pre>';
-            $gist .= htmlentities($result['body']);
-            $gist .= '</pre></code></div></noscript>';
+        }
+
+        $gist = '';
+
+        if (count($files)) {
+            if ( embed_github_gist_prefer_inline_html() ) {
+                foreach ($files as $name => $fileInfo) {
+                    $language = strtolower($fileInfo['language']);
+                    $gist .= '<pre><code class="language-'.$language.' '.$language.'">';
+                    $gist .= htmlentities($fileInfo['content']);
+                    $gist .= '</code></pre>';
+                }
+            } else {
+                $urlExtra = $file ? '?file='.$file : '';
+                $gist .= '<script src="https://gist.github.com/'.$id.'.js'.$urlExtra.'"></script>';
+                $gist .= '<noscript>';
+                foreach ($files as $name => $fileInfo) {
+                    $language = strtolower($fileInfo['language']);
+                    $gist .= '<pre><code class="language-'.$language.' '.$language.'">';
+                    $gist .= htmlentities($fileInfo['content']);
+                    $gist .= '</code></pre>';
+                }
+                $gist .= '</noscript>';
+            }
         }
         
         unset($result, $http);
@@ -129,13 +153,6 @@ function handle_embed_github_gist_shortcode($atts, $content = null) {
 }
 
 /**
- * Styles.
- */
-function embed_github_gist_styles() {
-    wp_enqueue_style('embed_github_gist_from_gist', plugins_url('stylesheets/embed.css', __FILE__));
-}
-
-/**
  * Init the plugin.
  */
 function handle_embed_github_gist_init() {
@@ -153,8 +170,6 @@ function embed_github_gist_post_candidate()
 	
 	foreach ($posts as $p) {
 		if (preg_match('/\[gist[^\]]*\]/siU', $p->post_content)) {
-			embed_github_gist_styles();
-
 			return true;
 		}
 	}

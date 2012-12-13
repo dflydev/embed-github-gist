@@ -2,12 +2,16 @@
 Contributors: dflydev
 Tags: github, gist, source, syntax, highlight, highlighter, embed
 Requires at least: 2.8.6
-Tested up to: 3.1
-Stable tag: 0.10
+Tested up to: 3.5
+Stable tag: 0.11
 
 Embed GitHub Gists into WordPress.
 
 == Description ==
+
+This project is available for forking on GitHub:
+
+ * https://github.com/dflydev/embed-github-gist
 
 Embed [GitHub](http://github.com/) [Gists](http://gist.github.com) into
 WordPress. Provides a shortcode for posts and pages but also has the ability
@@ -99,6 +103,9 @@ Ues. You can use the `file` parameter:
 No screenshots now!
 
 == Changelog ==
+
+= 0.11 =
+ * Updated to account for recent changes to Gist.
 
 = 0.10 =
  * Bump release ("same as 0.9")
