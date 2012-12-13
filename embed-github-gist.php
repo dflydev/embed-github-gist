@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/extend/plugins/embed-github-gist/
 Description: Embed GitHub Gists
 Author: Dragonfly Development
 Author URI: http://dflydev.com/
-Version: 0.12
+Version: 0.13
 License: MIT - http://opensource.org/licenses/mit
 */
 
@@ -76,11 +76,23 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
     if ( embed_github_gist_bypass_cache() || false === ( $gist = get_transient($key) ) ) {
     	$http = new WP_Http;
         $args = array('sslverify' => false);
+        if (defined('EMBED_GISTHUB_USERNAME') && defined('EMBED_GISTHUB_PASSWORD')) {
+            $args['headers'] = array( 'Authorization' => 'Basic '.base64_encode(EMBED_GISTHUB_USERNAME.':'.EMBED_GISTHUB_PASSWORD) );
+        }
         $result = $http->request('https://api.github.com/gists/' . $id, $args);
         if ( is_wp_error($result) ) {
             echo $result->get_error_message();
         }
         $json = json_decode($result['body'], true);
+        if (200 != $result['response']['code']) {
+            $html = '<div>Could not embed GitHub Gist '.$id;
+            if (isset($json['message'])) {
+                $html .= ': '. $json['message'];
+            }
+            $html .= '</div>';
+
+            return $html;
+        };
 
         $files = array();
         foreach ($json['files'] as $name => $fileInfo) {

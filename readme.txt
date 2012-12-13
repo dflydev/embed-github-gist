@@ -3,7 +3,7 @@ Contributors: dflydev
 Tags: github, gist, source, syntax, highlight, highlighter, embed
 Requires at least: 2.8.6
 Tested up to: 3.5
-Stable tag: 0.12
+Stable tag: 0.13
 
 Embed GitHub Gists into WordPress.
 
@@ -29,30 +29,10 @@ Examples:
 Cache is implemented with the Transients API to minimize delay on loading
 content. Default TTL (time to live) is 86400 seconds or one day.
 
-If `json_decode` is available, the HTML markup for the source code will be
-injected into the post inline. This will ensure that the code is available to
-spiders and feed readers.
-
-If `json_decode` is not available, the standard GitHub Gist embed script
-(JavaScript) is included and the raw content will be added into a `NOSCRIPT`
-section wrapped as follows:
-
-`<noscript>`
-`<div class="embed-github-gist-source">`
-`<code>`
-`<pre>raw code here</pre>`
-`</code >`
-`</div>`
-`</noscript>`
-
-
 = Upcoming features: =
 
 * Option for setting default TTL
 * Option to bypass cache entirely
-* Option to select CSS loading location preference
-* Option to allow for preferring JavaScript over inline HTML
-* Shortcode attribute to control inline vs. js preference
 * Implement admin interface to control options
 
 == Installation ==
@@ -64,6 +44,10 @@ section wrapped as follows:
 1. Start using the plugin by adding Gists to posts!
 
 == Frequently Asked Questions ==
+
+= How can I fix rate limit exceded errors? =
+
+Define EMBED_GISTHUB_USERNAME and EMBED_GISTHUB_PASSWORD in wp-settings.php.
 
 = Can the cache be broken? =
 
@@ -104,6 +88,9 @@ No screenshots now!
 
 == Changelog ==
 
+= 0.13 =
+ * Looks at EMBED_GISTHUB_USERNAME and EMBED_GISTHUB_PASSWORD for API requests
+
 = 0.12 =
  * Bump release ("same as 0.11")
  * Added upgrade notes
@@ -143,6 +130,9 @@ No screenshots now!
 * First release.
 
 == Upgrade Notice ==
+
+= 0.13 =
+Now looks for EMBED_GISTHUB_USERNAME and EMBED_GISTHUB_PASSWORD
 
 = 0.12 =
 = 0.11 =

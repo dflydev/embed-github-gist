@@ -52,6 +52,10 @@ section wrapped as follows:
 
 ## Frequently Asked Questions
 
+### How can I fix rate limit exceded errors?
+
+Define EMBED_GISTHUB_USERNAME and EMBED_GISTHUB_PASSWORD in wp-settings.php.
+
 ### Can the cache be broken?
 
 Yes. Use a unique bump value to force cache to update. For instance, if you have
