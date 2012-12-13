@@ -3,7 +3,7 @@ Contributors: dflydev
 Tags: github, gist, source, syntax, highlight, highlighter, embed
 Requires at least: 2.8.6
 Tested up to: 3.5
-Stable tag: 0.11
+Stable tag: 0.12
 
 Embed GitHub Gists into WordPress.
 
@@ -104,6 +104,10 @@ No screenshots now!
 
 == Changelog ==
 
+= 0.12 =
+ * Bump release ("same as 0.11")
+ * Added upgrade notes
+
 = 0.11 =
  * Updated to account for recent changes to Gist.
 
@@ -139,6 +143,11 @@ No screenshots now!
 * First release.
 
 == Upgrade Notice ==
+
+= 0.12 =
+= 0.11 =
+Now defaults to not embedding HTML directly.
+Now requires json_decode to be available.
 
 = 0.5 =
 Now defaults to using cache and embedding HTML directly.
