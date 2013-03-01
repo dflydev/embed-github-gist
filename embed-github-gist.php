@@ -118,7 +118,11 @@ function embed_github_gist($id, $ttl = null, $bump = null, $file = null) {
                 }
             } else {
                 $urlExtra = $file ? '?file='.$file : '';
-                $gist .= '<script src="https://gist.github.com/'.$id.'.js'.$urlExtra.'"></script>';
+                if (defined(EMBED_GISTHUB_USERNAME)) {
+                	$gist .= '<script src="https://gist.github.com/'.EMBED_GISTHUB_USERNAME.'/'.$id.'.js'.$urlExtra.'"></script>';
+                } else {
+                	$gist .= '<script src="https://gist.github.com/'.$id.'.js'.$urlExtra.'"></script>';
+                }
                 $gist .= '<noscript>';
                 foreach ($files as $name => $fileInfo) {
                     $language = strtolower($fileInfo['language']);
